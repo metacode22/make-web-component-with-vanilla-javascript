@@ -1,9 +1,12 @@
 export default class Items extends Component {
-  get filteredItems () {
+  get filteredItems() {
     const { isFilter, items } = this.$state;
-    return items.filter(({ active }) => (isFilter === 1 && active) ||
-                                        (isFilter === 2 && !active) ||
-                                        isFilter === 0);
+    return items.filter(
+      ({ active }) =>
+        (isFilter === 1 && active) ||
+        (isFilter === 2 && !active) ||
+        isFilter === 0,
+    );
   }
 
   setup() {
@@ -19,8 +22,8 @@ export default class Items extends Component {
           seq: 2,
           contents: 'item2',
           active: true,
-        }
-      ]
+        },
+      ],
     };
   }
 
@@ -31,15 +34,21 @@ export default class Items extends Component {
       </header>
       <main>
         <ul>
-          ${this.filteredItems.map(({contents, active, seq}) => `
+          ${this.filteredItems
+            .map(
+              ({ contents, active, seq }) => `
             <li data-seq="${seq}">
               ${contents}
-              <button class="toggleBtn" style="color: ${active ? '#09F' : '#F09'}">
+              <button class="toggleBtn" style="color: ${
+                active ? '#09F' : '#F09'
+              }">
                 ${active ? '활성' : '비활성'}
               </button>
               <button class="deleteBtn">삭제</button>
             </li>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </ul>
       </main>
       <footer>
@@ -47,37 +56,37 @@ export default class Items extends Component {
         <button class="filterBtn" data-is-filter="1">활성 보기</button>
         <button class="filterBtn" data-is-filter="2">비활성 보기</button>
       </footer>
-    `
+    `;
   }
 
   setEvent() {
     this.addEvent('keyup', '.appender', ({ key, target }) => {
       if (key !== 'Enter') return;
-      const {items} = this.$state;
+      const { items } = this.$state;
       const seq = Math.max(0, ...items.map(v => v.seq)) + 1;
       const contents = target.value;
       const active = false;
       this.setState({
-        items: [
-          ...items,
-          {seq, contents, active}
-        ]
+        items: [...items, { seq, contents, active }],
       });
     });
 
-    this.addEvent('click', '.deleteBtn', ({target}) => {
-      const items = [ ...this.$state.items ];;
+    this.addEvent('click', '.deleteBtn', ({ target }) => {
+      const items = [...this.$state.items];
       const seq = Number(target.closest('[data-seq]').dataset.seq);
-      items.splice(items.findIndex(v => v.seq === seq), 1);
-      this.setState({items});
+      items.splice(
+        items.findIndex(v => v.seq === seq),
+        1,
+      );
+      this.setState({ items });
     });
 
-    this.addEvent('click', '.toggleBtn', ({target}) => {
-      const items = [ ...this.$state.items ];
+    this.addEvent('click', '.toggleBtn', ({ target }) => {
+      const items = [...this.$state.items];
       const seq = Number(target.closest('[data-seq]').dataset.seq);
       const index = items.findIndex(v => v.seq === seq);
       items[index].active = !items[index].active;
-      this.setState({items});
+      this.setState({ items });
     });
 
     this.addEvent('click', '.filterBtn', ({ target }) => {

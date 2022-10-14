@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Web Component</title>
-	</head>
-	<body>
-		<div id="app"></div>
-		<script>
-			// Component 기본 사항들
-			class Component {
-				$target;
-				$state;
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Component</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // Component 기본 사항들
+      class Component {
+        $target;
+        $state;
 
-				// 인스턴스가 만들어지는 시점에 setup, render 함수를 실행
-				constructor($target) {
-					this.$target = $target;
-					this.setup();
+        // 인스턴스가 만들어지는 시점에 setup, render 함수를 실행
+        constructor($target) {
+          this.$target = $target;
+          this.setup();
           // 이 코드로 인해 new 키워드에 의해 인스턴스가 생성되면 render가 실행되어 초기 state를 바탕으로 한 template을 받아 화면에 렌더링 + 이벤트 설정
-					this.render();
-				}
+          this.render();
+        }
 
-				setup() {}
-				setEvent() {}
-				template() {
-					return '';
-				}
-				render() {
-					this.$target.innerHTML = this.template();
-					this.setEvent();
-				}
-				setState(newState) {
-					this.$state = { ...this.$state, ...newState };
-					this.render();
-				}
-			}
+        setup() {}
+        setEvent() {}
+        template() {
+          return '';
+        }
+        render() {
+          this.$target.innerHTML = this.template();
+          this.setEvent();
+        }
+        setState(newState) {
+          this.$state = { ...this.$state, ...newState };
+          this.render();
+        }
+      }
 
-			// 기본사항인 Component를 바탕으로 App이라는 Component 생성하여 렌더링
-			class App extends Component {
+      // 기본사항인 Component를 바탕으로 App이라는 Component 생성하여 렌더링
+      class App extends Component {
         // state 설정, constructor에 의해 처음에 new 키워드에 의해 인스턴스가 생성되면 실행됨.
-				setup() {
-					this.$state = { items: ['item1', 'item2'] };
-				}
+        setup() {
+          this.$state = { items: ['item1', 'item2'] };
+        }
         // template를 만듦.
-				template() {
-					const { items } = this.$state;
-					return `
+        template() {
+          const { items } = this.$state;
+          return `
             <ul>
-              ${items.map((item) => `<li>${item}</li>`).join('')}
+              ${items.map(item => `<li>${item}</li>`).join('')}
             </ul>
             <button>추가</button>
           `;
-				}
+        }
         // App이라는 컴포넌트에서 일어나는 event 설정
-				setEvent() {
-					this.$target.querySelector('button').addEventListener('click', () => {
-						const { items } = this.$state;
-						this.setState({ items: [...items, `item${items.length + 1}`] });
-					});
-				}
-			}
-    
-    // App이라는 컴포넌트를 #app에 생성
-    new App(document.querySelector('#app'));
-		</script>
-	</body>
+        setEvent() {
+          this.$target.querySelector('button').addEventListener('click', () => {
+            const { items } = this.$state;
+            this.setState({ items: [...items, `item${items.length + 1}`] });
+          });
+        }
+      }
+
+      // App이라는 컴포넌트를 #app에 생성
+      new App(document.querySelector('#app'));
+    </script>
+  </body>
 </html>
